@@ -1,0 +1,28 @@
+<script type="text/javascript" src="http://chengxianga2008.github.com/node-cryptojs-aes/client/aes.js"></script>
+<script type="text/javascript" src="http://chengxianga2008.github.com/node-cryptojs-aes/client/jsonformatter.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">  
+  
+let secret = "WHEEEEEEEEEEEEE";
+
+let encrypted = CryptoJS.AES.encrypt("尼豪我是GGGGGGGG", secret, { format: JsonFormatter }).toString();
+
+console.log("encrypted string: " + encrypted);
+
+var decrypted = CryptoJS.AES.decrypt(encrypted, secret + "C", { format: JsonFormatter });
+ 
+// convert to Utf8 format unmasked data 
+var decrypted_str = "";
+try{
+decrypted_str = CryptoJS.enc.Utf8.stringify(decrypted);
+}
+catch(e){}
+finally{
+    if(decrypted_str == ""){
+        decrypted_str = "GGGGGGGGGGGG";
+    }
+}
+ 
+console.log("decrypted string: " + decrypted_str);
+</script>  

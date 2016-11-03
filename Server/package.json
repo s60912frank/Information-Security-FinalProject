@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "global": "^4.3.1",
+    "jsonwebtoken": "^7.1.9",
+    "koa": "next",
+    "koa-bodyparser": "next",
+    "koa-router": "next",
+    "koa-static": "^2.0.0",
+    "node-cryptojs-aes": "^0.4.0",
+    "shortid": "^2.2.6",
+    "socketio-jwt": "^4.5.0"
+  },
+  "scripts": {
+    "start": "node --harmony-async-await index.js"
+  }
+}

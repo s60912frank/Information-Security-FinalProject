@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>我是首頁</title>
+</head>
+<body>
+    <h1>登入吧~!</h1>
+    <div id="au">
+        <input id="name">
+        <input id="password">
+        <button id="login">登入</button>
+        <button id="register">註冊</button>
+    </div>
+
+    <div id="rl">
+        <input id="roomName">
+        <button id="createRoom">建立房間</button>
+        <ul></ul>
+    </div>
+
+    <script type="text/javascript" src="http://chengxianga2008.github.com/node-cryptojs-aes/client/aes.js"></script>
+    <script type="text/javascript" src="http://chengxianga2008.github.com/node-cryptojs-aes/client/jsonformatter.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            let jwt = localStorage.getItem("jwt");
+            console.log(jwt);
+            if(jwt){
+                $.post('verifyJwt', { token: jwt },(data) => {
+                    if(data.valid){
+                        //go room list
+                        $("#au").hide();
+                    }
+                });
+            }
+
+            $("#login").click(() => {
+                let dataToPost = {
+                    username: $('#name').val(),
+                    password: $('#password').val()
+                }
+                $.post('login', dataToPost,(data) => {
+                    if(data.token){
+                        localStorage.setItem("jwt", data.token);
+                        console.log(localStorage.getItem("jwt"));
+                        //go room list
+                        $("#au").hide();
+                    }
+                    else{
+                        //error msg
+                        console.log(data.error);
+                    }
+                });
+            });
+
+            $("#register").click(() => {
+                let dataToPost = {
+                    username: $('#name').val(),
+                    password: $('#password').val()
+                }
+                $.post('register', dataToPost,(data) => {
+                    if(data.token){
+                        localStorage.setItem("jwt", data.token);
+                        //go room list
+                        $("#au").hide();
+                    }
+                    else{
+                        //error msg
+                        console.log(data.error);
+                    }
+                });
+            });
+
+            let next = () => {
+                let socket = io.connect('http://localhost:3000', {'query': 'token=' + localStorage.getItem("jwt") });
+                socket.on('roomList', (data) => console.log(data));
+                socket.on('roomAdded', (data) => console.log(data));
+                $('#createRoom').click(() => {
+                    socket.emit
+                });
+            }
+        });
+    </script>
+</body>
+</html>
