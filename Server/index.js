@@ -18,6 +18,8 @@ require('./app/router.js')(router);
 let crypto = require('crypto');
 let secret = crypto.randomBytes(32).toString("base64");
 
+const ChatRoom = require('./models/chatroom.js');
+
 const io = require('socket.io')(app.server);
 const socketioJwt = require("socketio-jwt");
 io.use(socketioJwt.authorize({
@@ -28,7 +30,9 @@ io.use(socketioJwt.authorize({
 io.on('connection', async (socket) => {
     console.log('hello! ', socket.decoded_token.name);
     let roomList = await ChatRoom.find({}, { "key": 0, "messages":0 }); //TODO: try-catch
-    socket.emit('roomList', roomList);
+    socket.on('getRoomList', () => {
+        socket.emit('roomList', roomList);
+    });
     //socket.emit("secret", secret);
     socket.on('joinRoom', async (roomId) => {
         let room = await ChatRoom.findOne({ '_id': roomId }); //TODO: try-catch
@@ -40,9 +44,12 @@ io.on('connection', async (socket) => {
                 history: room.messages,
                 key: room.key
             });
+            console.log('JOIN成功!');
+            chat(socket, room);
         }
         else{
             //room不存在
+            console.log('JOIN失敗!');
         }
         //console.log('message: ' + msg);
         //io.emit("msg", msg);
@@ -51,12 +58,11 @@ io.on('connection', async (socket) => {
     socket.on('createRoom', async (room) => {
         let newRoom = new ChatRoom();
         newRoom.name = room.name;
-        socket.join(newRoom._id);
-        socket.emit('room', {
-            _id: roomId,
-            name: room.name,
-            history: room.messages,
-            key: room.key
+        //socket.join(newRoom._id);
+        io.emit('room', {
+            _id: newRoom._id,
+            name: newRoom.name,
+            key: newRoom.key
         });
         await newRoom.save();
     });
@@ -67,10 +73,11 @@ io.on('connection', async (socket) => {
 });
 
 let chat = async (socket, room) => {
+    console.log('hi');
     socket.on('msg', async (msg) => {
         console.log('message: ' + msg);
         io.to(room._id).emit("msg", msg);
-        room.messages.append(msg);
+        room.messages.push(msg);
         await room.save(); //TODO: try-catch
     });
 }

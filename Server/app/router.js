@@ -1,5 +1,4 @@
 const User = require('../models/user.js');
-const ChatRoom = require('../models/chatroom.js');
 const jwtSecret = "gminissosmart";
 const jwt = require('jsonwebtoken');
 
@@ -15,7 +14,10 @@ module.exports = (app) => {
                     "name": user.name
                 };
                 let token = await jwt.sign(data, jwtSecret);
-                ctx.body = { "token": token };
+                ctx.body = { 
+                    "token": token,
+                    "name": user.name
+                };
             } else {
                 ctx.body = { "error": "帳號不存在或密碼錯誤" };
             }
@@ -38,12 +40,13 @@ module.exports = (app) => {
                     "name": newUser.name
                 };
                 let token = await jwt.sign(data, jwtSecret);
-                ctx.body = {
-                    "token": token
+                ctx.body = { 
+                    "token": token,
+                    "name": newUser.name
                 };
                 await newUser.save();
             } else {
-                ctx.body = { "error": "帳號不存在或密碼錯誤" };
+                ctx.body = { "error": "帳號已經存在!" };
             }
         } catch (e) {
             ctx.body = { "error": "伺服器錯誤" };
