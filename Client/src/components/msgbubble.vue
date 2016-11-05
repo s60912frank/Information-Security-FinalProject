@@ -1,10 +1,10 @@
 <template>
-  <div id="bubble">
-    <p>{{ msg.name }}</p><br>
+  <div id="bubble"  v-bind:class="{ 'me': isMe, 'other': !isMe }">
+    <p id="name">{{ msg.name }}</p>
     <div>
       {{ msg.msg }}
     </div>
-    <p>{{ msg.time }}</p>
+    <p id="time">{{ msg.time }}</p>
   </div>
 </template>
 
@@ -13,13 +13,12 @@ export default {
   name: 'bubble',
   mounted () {
     this.msg.time = this.formatTime(this.msg.time)
+    this.isMe = this.msg.name === window.localStorage.getItem('name')
   },
   props: ['msg'],
   data () {
     return {
-      // username: '',
-      // msg: '',
-      // time: ''
+      isMe: false
     }
   },
   methods: {
@@ -33,16 +32,45 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="stylus">
+#bubble {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  border: 1px solid black;
+}
 #bubble div {
-  background-color: orange;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   padding: 0.5rem;
-  display: inline-block;
-  width: 200px;
+  margin: 0;
+  max-width: 40%;
   word-break: break-all;
 }
+
 p {
-  display: inline-block;
+  margin: 0;
+}
+
+#name {
+}
+
+#time {
+  align-self: flex-end;
+}
+
+.me {
+  justify-content: flex-end;
+}
+
+.me div {
+  background-color: orange;
+}
+
+.other {
+  justify-content: flex-start;
+}
+
+.other div {
+  background-color: lightgray;
 }
 </style>

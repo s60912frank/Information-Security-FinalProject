@@ -41,13 +41,11 @@ export default {
     },
     listeners (socket) {
       socket.on('room', (data) => {
-        console.log(data)
         this.listRoom.push(data)
       })
 
       socket.on('roomList', (data) => {
         this.listRoom = data
-        console.log(data)
       })
     },
     logout () {

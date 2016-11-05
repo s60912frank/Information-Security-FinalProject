@@ -77,6 +77,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.styl$/,
+        loader: 'css-loader!stylus-loader?paths=node_modules/bootstrap-stylus/stylus/'
       }
     ]
   },
