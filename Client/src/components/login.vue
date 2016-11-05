@@ -1,22 +1,33 @@
 <template>
-  <div class="login">
-    帳號: <input v-model="username"><br>
-    密碼: <input v-model="password" type="password"><br>
-    <button v-on:click="login">登入</button>
-    <button v-on:click="register">註冊</button>
+  <div id="login">
+    <h1>登入or註冊</h1>
+    <div class="row"><p>帳號</p></div>
+    <div class="row">
+      <input v-model="username" class="input">
+    </div>
+    <div class="row"><p>密碼</p></div>
+    <div class="row">
+      <input v-model="password" type="password" class="input">
+    </div> 
+    <div class="row" id="btns">
+      <button v-on:click="login">登入</button>
+    </div>
+    <div class="row">
+      <button v-on:click="register">註冊</button>
+    </div>
     <h3>{{ errorMsg }}</h3>
   </div>
 </template>
 
 <script>
+import SHA from 'sha256'
 export default {
   name: 'login',
   mounted () {
     let jwt = window.localStorage.getItem('jwt')
     if (jwt) {
-      this.$http.post('http://localhost:3000/verifyJwt', { token: jwt }).then((res) => {
+      this.$http.post('verifyJwt', { token: jwt }).then((res) => {
         if (res.body.valid) {
-          console.log('token good')
           this.$router.push('roomList')
         }
       }, (err) => {
@@ -33,18 +44,19 @@ export default {
   },
   methods: {
     logOrReg (type) {
-      let url = 'http://localhost:3000/' + type
+      if (this.username === '' || this.password === '') {
+        this.errorMsg = '帳號或密碼不得為空!'
+        return
+      }
+      let url = type
       let data = {
         'username': this.username,
-        'password': this.password
+        'password': SHA(this.password)
       }
-      console.log(data)
       this.$http.post(url, data).then((res) => {
-        console.log(res.body)
         if (res.body.error) {
           this.errorMsg = res.body.error
         } else {
-          // good to go!
           window.localStorage.setItem('jwt', res.body.token)
           window.localStorage.setItem('name', res.body.name)
           console.log('token saved')
@@ -65,6 +77,10 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style scoped lang="stylus">
+  .input
+    height: 2.5rem
+    margin-bottom: 0.5rem
+  p
+    margin: 0
 </style>

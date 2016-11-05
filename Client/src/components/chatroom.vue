@@ -1,9 +1,14 @@
 <template>
   <div id="chatroom">
-    <h1>{{ roomName }}</h1>
+    <div class="row" id="title">
+      <h1>{{ roomName }}</h1>
+      <router-link to="roomList" id="back">回房間列表</router-link>
+    </div>
     <messageBox v-bind:msgs="messages"></messageBox>
-    <input v-model="msgInput" @keyup.enter="send">
-    <button @click="send">送出</button>
+    <div class="row">
+      <textarea id="inputbox" v-model="msgInput" @keypress.enter="send"></textarea>
+      <button @click="send">送出</button>
+    </div>
   </div>
 </template>
 
@@ -17,11 +22,9 @@ export default {
   components: { Bubble, MessageBox },
   mounted () {
     if (!window.localStorage.getItem('jwt')) {
-      console.log('no token')
       this.$router.push('login')
     }
     if (!window.socket) {
-      console.log('no socket')
       this.$router.push('roomList')
     }
     this.name = window.localStorage.getItem('name')
@@ -58,8 +61,7 @@ export default {
       })
     },
     send () {
-      console.log(this.msgInput)
-      if (this.msgInput !== '') {
+      if (this.msgInput.trim() !== '') {
         let msgToSend = {
           'name': this.name,
           'msg': this.msgInput,
@@ -71,7 +73,6 @@ export default {
     },
     encryptMsg (msg) {
       let encrypted = CryptoJS.AES.encrypt(msg, this.key, { format: JsonFormatter }).toString()
-      console.log('enc: ' + encrypted)
       return encrypted
     },
     decryptMsg (msg) {
@@ -83,7 +84,12 @@ export default {
 
       } finally {
         if (decryptedStr === '') {
-          decryptedStr = '!!無法解密訊息!!'
+          let error = {
+            msg: '!!無法解密訊息!!',
+            name: 'unknown',
+            time: new Date()
+          }
+          decryptedStr = JSON.stringify(error)
         }
       }
       return JSON.parse(decryptedStr)
@@ -92,5 +98,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="stylus">
+  #title
+    margin-bottom: 0.5rem
+    display: flex
+    justify-content: space-between
+  #back
+    align-self: flex-end
+    font-size: 2rem
+  #inputbox
+    margin-right 1rem
 </style>

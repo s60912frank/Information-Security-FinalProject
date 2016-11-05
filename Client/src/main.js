@@ -1,15 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import VueHead from 'vue-head'
 
 import App from './App'
 import Login from './components/login'
 import RoomList from './components/roomlist'
 import ChatRoom from './components/chatroom'
 
+import './assets/milligram.min.css'
+
 Vue.use(VueRouter)
 Vue.use(VueResource)
-Vue.config.devtools = true
+Vue.use(VueHead)
 
 const routes = [
   { path: '/login', component: Login },

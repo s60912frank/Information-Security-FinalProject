@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-    <h1>嗨!</h1>
+  <div id="app" class="container">
     <router-view></router-view>
   </div>
 </template>
@@ -9,8 +8,13 @@
 export default {
   name: 'app',
   mounted () {
-    console.log('ok!')
+    window.document.title = 'Secure Chat Room'
     this.$router.push('login')
+  },
+  head: {
+    meta: [
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+    ]
   }
 }
 </script>

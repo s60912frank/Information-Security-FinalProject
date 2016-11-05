@@ -22,7 +22,7 @@ export default {
       this.$router.push('login')
     }
     if (!window.socket) {
-      window.socket = io.connect('http://localhost:3000', { 'query': 'token=' + window.localStorage.getItem('jwt') })
+      window.socket = io.connect('/', { 'query': 'token=' + window.localStorage.getItem('jwt') })
     }
     this.socket = window.socket
     this.socket.emit('getRoomList')

@@ -12,7 +12,6 @@ export default {
     this.$watch('msgs', (n, o) => {
       if (!this.scrolled) {
         this.$el.scrollTop = this.$el.scrollHeight
-        console.log('捲')
         this.scrolled = true
       }
     })
@@ -36,15 +35,19 @@ export default {
 }
 </script>
 
-<style scoped>
-#msgbox {
-    overflow-y: scroll;
-    background-color: lightblue;
-    height: 500px;
-    width: 80%;
-}
+<style scoped lang="stylus">
+#msgbox
+  box-sizing: border-box
+  border-radius: 0.5rem
+  height: 50rem
+  overflow-y: scroll
+  background-color: lightblue
+  padding-left: 0.5rem
+  padding-right: 0.5rem
+  margin-left: -0.9rem
+  margin-right: -0.9rem
+  margin-bottom: 1rem
 
-#msgbox ul li {
-    list-style-type: none;
-}
+#msgbox ul li
+  list-style-type: none
 </style>

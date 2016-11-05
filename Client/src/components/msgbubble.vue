@@ -1,8 +1,14 @@
 <template>
   <div id="bubble" v-bind:class="{ 'me': isMe, 'other': !isMe }">
-    <p id="name">{{ msg.name }}</p>
-    <div>{{ msg.msg }}</div>
-    <p id="time">{{ msg.time }}</p>
+    <div>
+      <div id="namecontainer">
+        <p>{{ msg.name }}</p>
+      </div>
+      <div id="msgandtime">
+        <div>{{ msg.msg }}</div>
+        <p>{{ msg.time }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,35 +40,39 @@ export default {
 #bubble
   margin-top: 1rem
   margin-bottom: 1rem
-  border: 1px solid black
   display: flex
-  flex-direction: row;
-  flex-wrap: wrap;
-
-#bubble div
-  border-radius: 1rem
-  padding: 0.5rem
-  margin: 0
-  max-width: 60%
-  word-break: break-all
+  & > div
+    max-width: 60%
+    display: inline-block
 
 p
   margin: 0
 
-#name
-  flex: 0 1 100%
-  justify-content: flex-end
-
-#time
-  align-self: flex-end
+.other
+  justify-content: flex-start
+  & div div
+    flex-direction: row
+    & div
+      background-color: lightgray
 
 .me
   justify-content: flex-end
-  & div
-    background-color: orange  
+  & div div
+    flex-direction: row-reverse
+    & div
+      background-color: orange
 
-.other
-  justify-content: flex-start
+#msgandtime
+  display: flex
   & div
-    background-color: lightgray
+    border-radius: 1rem
+    padding: 0.5rem
+    margin: 0
+    word-break: break-all
+    color: black
+  & p
+    align-self: flex-end
+
+#namecontainer
+  display: flex
 </style>
