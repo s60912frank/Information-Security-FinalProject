@@ -1,10 +1,6 @@
 <template>
   <div id="msgbox" v-on:scroll="scroll">
-    <ul>
-      <li v-for="msg in msgs">
-        <bubble v-bind:msg="msg"></bubble>
-      </li>
-    </ul>
+    <bubble v-for="msg in msgs" v-bind:msg="msg"></bubble>
   </div>
 </template>
 

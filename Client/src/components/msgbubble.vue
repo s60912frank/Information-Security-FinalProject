@@ -1,9 +1,7 @@
 <template>
-  <div id="bubble"  v-bind:class="{ 'me': isMe, 'other': !isMe }">
+  <div id="bubble" v-bind:class="{ 'me': isMe, 'other': !isMe }">
     <p id="name">{{ msg.name }}</p>
-    <div>
-      {{ msg.msg }}
-    </div>
+    <div>{{ msg.msg }}</div>
     <p id="time">{{ msg.time }}</p>
   </div>
 </template>
@@ -33,44 +31,38 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-#bubble {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  border: 1px solid black;
-}
-#bubble div {
-  border-radius: 1rem;
-  padding: 0.5rem;
-  margin: 0;
-  max-width: 40%;
-  word-break: break-all;
-}
+#bubble
+  margin-top: 1rem
+  margin-bottom: 1rem
+  border: 1px solid black
+  display: flex
+  flex-direction: row;
+  flex-wrap: wrap;
 
-p {
-  margin: 0;
-}
+#bubble div
+  border-radius: 1rem
+  padding: 0.5rem
+  margin: 0
+  max-width: 60%
+  word-break: break-all
 
-#name {
-}
+p
+  margin: 0
 
-#time {
-  align-self: flex-end;
-}
+#name
+  flex: 0 1 100%
+  justify-content: flex-end
 
-.me {
-  justify-content: flex-end;
-}
+#time
+  align-self: flex-end
 
-.me div {
-  background-color: orange;
-}
+.me
+  justify-content: flex-end
+  & div
+    background-color: orange  
 
-.other {
-  justify-content: flex-start;
-}
-
-.other div {
-  background-color: lightgray;
-}
+.other
+  justify-content: flex-start
+  & div
+    background-color: lightgray
 </style>
