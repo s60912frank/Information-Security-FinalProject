@@ -26,7 +26,7 @@ export default {
   mounted () {
     let jwt = window.localStorage.getItem('jwt')
     if (jwt) {
-      this.$http.post('verifyJwt', { token: jwt }).then((res) => {
+      this.$http.post('http://localhost:3000/verifyJwt', { token: jwt }).then((res) => {
         if (res.body.valid) {
           this.$router.push('roomList')
         }
@@ -48,7 +48,7 @@ export default {
         this.errorMsg = '帳號或密碼不得為空!'
         return
       }
-      let url = type
+      let url = 'http://localhost:3000/' + type
       let data = {
         'username': this.username,
         'password': SHA(this.password)

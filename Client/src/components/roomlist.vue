@@ -8,6 +8,7 @@
         <router-link :to="{ path: 'chatRoom', query: { id: room._id }}">
           {{ room.name }}({{ room._id }})
         </router-link>
+        <button v-if='room.owner == name' @click="delRoom" :id="room._id">X</button>
       </li>
     </ul>
   </div>
@@ -21,9 +22,9 @@ export default {
     if (!window.localStorage.getItem('jwt')) {
       this.$router.push('login')
     }
-    if (!window.socket) {
-      window.socket = io.connect('/', { 'query': 'token=' + window.localStorage.getItem('jwt') })
-    }
+    this.name = window.localStorage.getItem('name')
+    delete (window.socket)
+    window.socket = io.connect('http://localhost:3000', { 'query': 'token=' + window.localStorage.getItem('jwt') })
     this.socket = window.socket
     this.socket.emit('getRoomList')
     this.listeners(this.socket)
@@ -32,7 +33,8 @@ export default {
     return {
       listRoom: [],
       roomName: '',
-      socket: {}
+      socket: {},
+      name: ''
     }
   },
   methods: {
@@ -53,6 +55,9 @@ export default {
       window.localStorage.removeItem('name')
       delete (window.socket)
       this.$router.push('login')
+    },
+    delRoom (e) {
+      this.socket.emit('deleteRoom', { name: e.target.id })
     }
   }
 }

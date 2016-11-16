@@ -1,4 +1,4 @@
-let port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+let port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 let ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 const koa = require('koa');
@@ -58,6 +58,7 @@ io.on('connection', async (socket) => {
     socket.on('createRoom', async (room) => {
         let newRoom = new ChatRoom();
         newRoom.name = room.name;
+        newRoom.owner = socket.decoded_token.name;
         //socket.join(newRoom._id);
         io.emit('room', {
             _id: newRoom._id,
@@ -65,6 +66,10 @@ io.on('connection', async (socket) => {
             key: newRoom.key
         });
         await newRoom.save();
+    });
+
+    socket.on('deleteRoom', async (roomName) => {
+        // 刪房間做到一半
     });
 
     socket.on('leaveRoom', (room) => {
@@ -83,6 +88,6 @@ let chat = async (socket, room) => {
 }
 
 // launch ======================================================================
-io.listen(app.listen(port, ip_address, () => console.log('The magic happens on port ' + port)));
+//io.listen(app.listen(port, ip_address, () => console.log('The magic happens on port ' + port)));
 //debug用
-//io.listen(app.listen(port, () => console.log('The magic happens on port ' + port)));
+io.listen(app.listen(port, () => console.log('The magic happens on port ' + port)));
