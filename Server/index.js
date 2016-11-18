@@ -32,6 +32,7 @@ io.use(socketioJwt.authorize({
 
 io.on('connection', async (socket) => {
     console.log('hello! ', socket.decoded_token.name);
+    socket.join('list');
     let roomList = await ChatRoom.find({}, { "key": 0, "messages":0 }); //TODO: try-catch
     socket.on('getRoomList', () => {
         socket.emit('roomList', roomList);
@@ -39,6 +40,7 @@ io.on('connection', async (socket) => {
     socket.on('joinRoom', async (roomId) => {
         let room = await ChatRoom.findOne({ '_id': roomId }); //TODO: try-catch
         if(room){
+            socket.leave('list');
             socket.join(roomId);
             socket.emit('room', {
                 _id: roomId,
@@ -68,8 +70,18 @@ io.on('connection', async (socket) => {
         await newRoom.save();
     });
 
-    socket.on('deleteRoom', async (roomName) => {
+    socket.on('deleteRoom', async (data) => {
         // 刪房間做到一半
+        let room = await ChatRoom.findOne({ '_id': data.id });
+        console.log(room);
+        if(room){
+            if(room.owner == socket.decoded_token.name){
+                console.log('wheeeeeeeeeeeeeee');
+                room.remove();
+                //io.to(room._id).emit('roomDeleted');
+                io.sockets.emit('roomRemoved', { 'id': data.id });
+            }
+        }
     });
 
     socket.on('leaveRoom', (room) => {

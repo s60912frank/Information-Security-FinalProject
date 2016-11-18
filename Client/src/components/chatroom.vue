@@ -27,15 +27,17 @@ export default {
     if (!window.socket) {
       this.$router.push('roomList')
     }
+    this.roomId = this.$route.query.id
     this.name = window.localStorage.getItem('name')
     this.socket = window.socket // need error handling
-    this.socket.emit('joinRoom', this.$route.query.id)
+    this.socket.emit('joinRoom', this.roomId)
     this.listeners(this.socket)
   },
   data () {
     return {
       socket: {},
       roomName: '',
+      roomId: '',
       messages: [],
       key: '',
       msgInput: '',
@@ -58,6 +60,13 @@ export default {
       socket.on('msg', (data) => {
         let msg = this.decryptMsg(data)
         this.messages.push(msg)
+      })
+
+      socket.on('roomRemoved', (data) => {
+        if (data.id === this.roomId) {
+          window.alert('系統提示:房間已由創建者刪除')
+          this.$router.push('roomList')
+        }
       })
     },
     send () {

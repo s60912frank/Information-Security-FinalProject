@@ -23,8 +23,10 @@ export default {
       this.$router.push('login')
     }
     this.name = window.localStorage.getItem('name')
-    delete (window.socket)
-    window.socket = io.connect('http://localhost:3000', { 'query': 'token=' + window.localStorage.getItem('jwt') })
+    if (window.socket) {
+      window.socket.disconnect()
+    }
+    window.socket = io.connect('', { 'query': 'token=' + window.localStorage.getItem('jwt') })
     this.socket = window.socket
     this.socket.emit('getRoomList')
     this.listeners(this.socket)
@@ -39,7 +41,12 @@ export default {
   },
   methods: {
     addRoom () {
-      this.socket.emit('createRoom', { name: this.roomName })
+      if (this.roomName === '') {
+        window.alert('房間名稱不能是空白的!')
+      } else {
+        this.socket.emit('createRoom', { name: this.roomName })
+        this.roomName = ''
+      }
     },
     listeners (socket) {
       socket.on('room', (data) => {
@@ -49,6 +56,14 @@ export default {
       socket.on('roomList', (data) => {
         this.listRoom = data
       })
+
+      socket.on('roomRemoved', (data) => {
+        for (let i = 0; i < this.listRoom.length; i++) {
+          if (this.listRoom[i]._id === data.id) {
+            this.listRoom.splice(i, 1)
+          }
+        }
+      })
     },
     logout () {
       window.localStorage.removeItem('jwt')
@@ -57,7 +72,7 @@ export default {
       this.$router.push('login')
     },
     delRoom (e) {
-      this.socket.emit('deleteRoom', { name: e.target.id })
+      this.socket.emit('deleteRoom', { id: e.target.id })
     }
   }
 }
