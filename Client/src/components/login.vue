@@ -26,6 +26,7 @@ export default {
   mounted () {
     let jwt = window.localStorage.getItem('jwt')
     if (jwt) {
+      console.log('JWT: ' + jwt)
       this.$http.post('verifyJwt', { token: jwt }).then((res) => {
         if (res.body.valid) {
           this.$router.push('roomList')
@@ -59,6 +60,7 @@ export default {
         } else {
           window.localStorage.setItem('jwt', res.body.token)
           window.localStorage.setItem('name', res.body.name)
+          console.log('JWT: ' + res.body.token)
           console.log('token saved')
           this.$router.push('roomList')
         }

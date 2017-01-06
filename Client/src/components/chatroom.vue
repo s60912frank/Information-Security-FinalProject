@@ -82,6 +82,7 @@ export default {
     },
     encryptMsg (msg) {
       let encrypted = CryptoJS.AES.encrypt(msg, this.key, { format: JsonFormatter }).toString()
+      console.log('原始訊息: ' + msg + '\n加密訊息: ' + encrypted)
       return encrypted
     },
     decryptMsg (msg) {
@@ -101,6 +102,7 @@ export default {
           decryptedStr = JSON.stringify(error)
         }
       }
+      console.log('原始訊息: ' + msg + '\n解密訊息: ' + decryptedStr)
       return JSON.parse(decryptedStr)
     }
   }
