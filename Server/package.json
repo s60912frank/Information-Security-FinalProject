@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "jsonwebtoken": "^7.1.9",
-    "koa": "next",
-    "koa-bodyparser": "next",
-    "koa-router": "next",
+    "koa": "^2.8.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
     "koa-static": "^2.0.0",
     "node-cryptojs-aes": "^0.4.0",
     "shortid": "^2.2.6",
@@ -12,6 +12,6 @@
     "socket.io": "^1.5.1"
   },
   "scripts": {
-    "start": "node --harmony-async-await index.js"
+    "start": "node index.js"
   }
 }

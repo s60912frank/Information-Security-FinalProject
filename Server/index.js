@@ -1,9 +1,10 @@
 let port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
-let ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+let ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
 const koa = require('koa');
 const app = new koa();
-const router = require('koa-router')();
+const Router = require('koa-router');
+const router = new Router();
 const bodyParser = require('koa-bodyparser');
 
 const mongoose = require('mongoose');
