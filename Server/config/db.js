@@ -10,7 +10,7 @@ var getDBAddr = () => {
   }
   else{
     //本地的DB
-    return 'mongodb://localhost:27017/ISFinal';
+    return 'mongodb://db:27017/ISFinal';
   }
 }
 

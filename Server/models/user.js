@@ -8,6 +8,8 @@ let userSchema = mongoose.Schema({
   },
   name: String,
   password: String
+}, {
+  usePushEach: true
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,5 +1,8 @@
 Server/node_modules
 .DS_Store
+Server/public/
 Client/node_modules/
 Client/dist/
 Client/npm-debug.log
+Client/yarn.lock
+Client/yarn-error.log

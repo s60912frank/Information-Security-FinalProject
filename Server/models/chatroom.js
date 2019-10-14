@@ -11,6 +11,8 @@ let crSchema = mongoose.Schema({
   key: { type: String, 'default': crypto.randomBytes(32).toString("base64") }, //改成readonly比較好
   messages: [],
   owner: String
+}, {
+  usePushEach: true
 });
 
 module.exports = mongoose.model('Chatroom', crSchema);
